@@ -11,8 +11,10 @@ module.exports = {
         filename: 'bundle.js'
     },
 
+    mode: "development",
+
     module: {
-        loaders: [
+        rules: [
             {test: /\.styl$/, loaders: [
                 'style-loader',
                 'css-loader',
@@ -42,6 +44,9 @@ module.exports = {
                     path.resolve(__dirname, 'src/generated/sprite.css'),
                     [path.resolve(__dirname, 'src/generated/sprite-custom.css'), {
                         format: 'custom_format'
+                    }],
+                    [path.resolve(__dirname, 'src/generated/sprite-custom-2.css'), {
+                        format: 'custom_handlebars'
                     }]
                 ]
             },
@@ -52,7 +57,10 @@ module.exports = {
                     var moduleName = dir[dir.length - 2];
                     return moduleName + '__' + parsed.name;
                 },
-                cssImageRef: '~sprite.[hash:6].png'
+                cssImageRef: '~sprite.[hash:6].png',
+                handlebarsHelpers: {
+                    helperExample: (x) => 10 * x
+                }
             },
             //retina: '@2x',
             spritesmithOptions: {
@@ -60,7 +68,8 @@ module.exports = {
             },
             customTemplates: {
                 'custom_format': myTemplates.customFormat,
-                'custom_format_retina': myTemplates.customFormatRetina
+                'custom_format_retina': myTemplates.customFormatRetina,
+                'custom_handlebars': path.resolve(__dirname, './custom.handlebars')
             }
         })
     ]
